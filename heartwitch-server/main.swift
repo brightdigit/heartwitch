@@ -9,14 +9,18 @@ import Foundation
 import Dispatch
 import Network
 
-var savedConnection : NWConnection?
-let listener = try! NWListener(using: .tls)
-listener.newConnectionHandler = {
+var webConnection : NWConnection?
+var heartRateConnection : NWConnection?
+let heartRateListener = try! NWListener(using: .tcp)
+heartRateListener.newConnectionHandler = {
   (connection) in
-  if savedConnection == nil {
-    savedConnection = connection
+  if heartRateConnection == nil {
+    heartRateConnection = connection
     connection.receiveMessage { (data, context, isComplete, error) in
       debugPrint(data)
+      webConnection?.send(content: data, completion: NWConnection.SendCompletion.contentProcessed({ (error) in
+        debugPrint(error)
+      }))
     }
     let uuid = UUID()
     let data = withUnsafePointer(to: uuid) {
@@ -24,26 +28,54 @@ listener.newConnectionHandler = {
     }
     
     connection.start(queue: .main)
-    connection.send(content: data, completion: NWConnection.SendCompletion.contentProcessed({ (error) in
-      debugPrint(error)
-    }))
+    
   } else {
     connection.cancel()
   }
- 
+  
 }
 
-listener.serviceRegistrationUpdateHandler = {
+heartRateListener.serviceRegistrationUpdateHandler = {
   (change) in
   print(change)
 }
-listener.stateUpdateHandler = {
+heartRateListener.stateUpdateHandler = {
   (state) in
   print(state)
-  print(listener.port)
+  print("Heart", heartRateListener.port)
 }
-listener.start(queue: .main)
+heartRateListener.start(queue: .main)
 
+let webListener = try! NWListener(using: .tcp)
+webListener.newConnectionHandler = {
+  (connection) in
+  if let webConnection = webConnection {
+    webConnection.cancel()
+  }
+  
+  webConnection = connection
+  
+  connection.start(queue: .main)
+  let data = withUnsafePointer(to: heartRateListener.port) {
+    Data(bytes: $0, count: MemoryLayout.size(ofValue: heartRateListener.port))
+  }
+  
+  connection.send(content: data, completion: NWConnection.SendCompletion.contentProcessed({ (error) in
+    debugPrint(error)
+  }))
+  
+}
+
+webListener.serviceRegistrationUpdateHandler = {
+  (change) in
+  print(change)
+}
+webListener.stateUpdateHandler = {
+  (state) in
+  print(state)
+  print("Web", webListener.port)
+}
+webListener.start(queue: .main)
 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
   print("Dispatch works")
 }

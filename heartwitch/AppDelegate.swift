@@ -14,7 +14,7 @@ import Network
 class AppDelegate: UIResponder, UIApplicationDelegate {
   
   var window: UIWindow?
-  
+  var timer : Timer?
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
@@ -22,15 +22,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let data = withUnsafePointer(to: uuid) {
       Data(bytes: $0, count: MemoryLayout.size(ofValue: uuid))
     }
-    let endPoint = NWEndpoint.hostPort(host: .ipv4(.any), port: 59386)
-    let connection = NWConnection(to: endPoint, using: .tls)
+    let endPoint = NWEndpoint.hostPort(host: .ipv4(.any), port: 49357)
+    let connection = NWConnection(to: endPoint, using: .tcp)
     connection.stateUpdateHandler = {
       (state) in
+      debugPrint(state)
       switch state {
+        
       case .ready:
-        connection.send(content: data, completion: NWConnection.SendCompletion.contentProcessed({ (error) in
-          debugPrint(error)
-        }))
+        timer = Timer(fire: Date(), interval: 1.0, repeats: true) { (_) in
+          connection.send(content: data, completion: NWConnection.SendCompletion.contentProcessed({ (error) in
+            debugPrint(error)
+          }))
+        }
+        
       
       default:
         break
