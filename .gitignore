@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Created by https://www.gitignore.io/api/xcode,swift,macos
 # Edit at https://www.gitignore.io/?templates=xcode,swift,macos
@@ -128,3 +129,11 @@ iOSInjectionProject/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.gitignore.io/api/xcode,swift,macos
+=======
+Packages
+.build
+xcuserdata
+*.xcodeproj
+DerivedData/
+.DS_Store
+>>>>>>> origin/features/spm-vapor
