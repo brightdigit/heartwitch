@@ -1,22 +1,22 @@
 <html>
   <script>
     window.onload = function () {
-      var newName = 'John Smith',
-      xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest();
       
       xhr.open('POST', 'workouts');
       xhr.responseType = "json"
       xhr.onload = function() {
         if (xhr.status === 200) {
-          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + xhr.response.id)
+          alert(window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
+          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
         }
         else if (xhr.status !== 200) {
           alert('Request failed.  Returned status of ' + xhr.status);
         }
       };
-      xhr.send(encodeURI('name=' + newName));
+      xhr.send();
     }
   </script>
-  <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example">
+  <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=nil">
   
 </html>
