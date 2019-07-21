@@ -24,7 +24,7 @@
 		B3A7C78C22D7BA5800EF8387 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B3A7C78F22D7BA5800EF8387 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B3A7C79122D7BA5800EF8387 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B3D80FF322D7B63100573D0C /* heartwitch */ = {isa = PBXFileReference; lastKnownFileType = folder; path = heartwitch; sourceTree = "<group>"; };
+		B3FC528E22E4EA2C00C14386 /* heartwitch */ = {isa = PBXFileReference; lastKnownFileType = folder; path = heartwitch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +41,7 @@
 		B396AEF322D787D20087D1CF = {
 			isa = PBXGroup;
 			children = (
-				B3D80FF322D7B63100573D0C /* heartwitch */,
+				B3FC528E22E4EA2C00C14386 /* heartwitch */,
 				B3A7C78222D7BA5500EF8387 /* heartwitch-ios-app */,
 				B396AEFF22D788100087D1CF /* Products */,
 			);

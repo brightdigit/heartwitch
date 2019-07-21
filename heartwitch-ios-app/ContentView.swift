@@ -10,8 +10,9 @@ import Network
 
 struct ContentView : View {
   var connection : NWConnection?
-  @State var id: String = "" {
-    didSet {
+  @State var id: String = ""
+    
+  func beginConnect (){
       guard let uuid = UUID(uuidString: self.id) else {
         return
       }
@@ -33,13 +34,26 @@ struct ContentView : View {
       }
      connection.start(queue: .main)
     }
-  }
+  
   
   func connectionReady(_ connection: NWConnection) {
-    connection.se
+    let source = DispatchSource.makeTimerSource()
+    
+    source.setEventHandler {
+        connection.send(content: UUID().uuidString.data(using: .utf8), completion: NWConnection.SendCompletion.idempotent)
+    }
+    source.schedule(deadline: .now(), repeating: 5)
+    source.activate()
+    
   }
+  
   var body: some View {
-    TextField("Enter the UUID", text: $id)
+    VStack{
+      TextField("Enter the UUID", text: $id)
+      Button(action: self.beginConnect) {
+        Text("Connect")
+      }
+    }
   }
 }
 
