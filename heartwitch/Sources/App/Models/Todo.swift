@@ -14,6 +14,12 @@ final class Workout: SQLiteUUIDModel {
         self.id = id
     }
   
+  static let createdAtKey: TimestampKey? = \.createdAt
+  static let updatedAtKey: TimestampKey? = \.updatedAt
+  
+  var createdAt: Date?
+  var updatedAt: Date?
+  
   func willUpdate(on conn: SQLiteConnection) throws -> EventLoopFuture<Workout> {
     if let id = self.id, var heartRate = self.heartRate, let ws = websockets[id] {
       

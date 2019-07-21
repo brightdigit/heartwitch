@@ -8,7 +8,26 @@
       xhr.onload = function() {
         if (xhr.status === 200) {
           alert(window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
-          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
+          alert("ws://" + window.location.hostname +  ":" + window.location.port + "/listen/" + xhr.response.id)
+          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id + "/run")
+          var ws = new WebSocket("ws://" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id + "/listen")
+          ws.onopen = function() {
+            
+            // Web Socket is connected, send data using send()
+            ws.send("Message to send");
+            alert("Message is sent...");
+          };
+          
+          ws.onmessage = function (evt) {
+            var received_msg = evt.data;
+            alert("Message is received...");
+          };
+          
+          ws.onclose = function() {
+            
+            // websocket is closed.
+            alert("Connection is closed...");
+          };
         }
         else if (xhr.status !== 200) {
           alert('Request failed.  Returned status of ' + xhr.status);
