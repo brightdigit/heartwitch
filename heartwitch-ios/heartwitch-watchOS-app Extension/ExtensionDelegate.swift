@@ -1,9 +1,8 @@
 //
 //  ExtensionDelegate.swift
-//  heartwitch WatchKit Extension
+//  heartwitch-watchOS-app Extension
 //
-//  Created by Leo Dion on 6/30/19.
-//  Copyright © 2019 BrightDigit. All rights reserved.
+//  Created by Leo Dion on 8/27/19.
 //
 
 import WatchKit
