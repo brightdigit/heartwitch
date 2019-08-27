@@ -1,6 +1,9 @@
 import FluentSQLite
 import Vapor
 
+let jsonEncoder = JSONEncoder()
+
+
 ///// A single entry of a Todo list.
 final class Workout: SQLiteUUIDModel {
     /// The unique identifier for this `Todo`.
@@ -21,13 +24,20 @@ final class Workout: SQLiteUUIDModel {
   var updatedAt: Date?
   
   func willUpdate(on conn: SQLiteConnection) throws -> EventLoopFuture<Workout> {
-    if let id = self.id, var heartRate = self.heartRate, let ws = websockets[id] {
-      
-      
-      ws.send(heartRate.description)
+    guard let wkData = self.data() else {
+      return conn.future(self)
+    }
+    if let id = self.id, var heartRate = self.heartRate, let data = try? jsonEncoder.encode(wkData), let ws = websockets[id] {
+      let text = String(bytes: data, encoding: .utf8)!
+      ws.send(text)
+      //ws.send(heartRate.description)
     }
     return conn.future(self)
     
+  }
+  
+  func data () -> WorkoutData? {
+    return WorkoutData(heartRate: self.heartRate)
   }
 }
 

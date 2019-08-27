@@ -1,9 +1,10 @@
 import FluentSQLite
 import Vapor
 import WebSocket
+import Foundation
 
 var websockets = [UUID : WebSocket]()
-
+let jsonDecoder = JSONDecoder()
 /// Called before your application initializes.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
     // Register providers first
@@ -31,19 +32,13 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     _ = try req.parameters.next(Workout.self).map{
       workout in
      
-      ws.onText { (ws, text) in
-        
-        if let value = Double(text) {
-        workout.heartRate = value
-        
-        _ = workout.save(on: req)
-        }
-      }
       ws.onBinary { (ws, data) in
-        let value = data.withUnsafeBytes{ $0.load(as: Double.self)}
-        workout.heartRate = value
+        if let workoutData = try? jsonDecoder.decode(WorkoutData.self, from: data) {
 
-        _ = workout.save(on: req)
+          workout.heartRate = workoutData.heartRate
+
+          _ = workout.save(on: req)
+        }
       }
     }
   }

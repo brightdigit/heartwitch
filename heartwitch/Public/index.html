@@ -15,12 +15,15 @@
             
             // Web Socket is connected, send data using send()
             ws.send("Message to send");
-            alert("Message is sent...");
+            //alert("Message is sent...");
           };
           
           ws.onmessage = function (evt) {
             var received_msg = evt.data;
-            alert("Message is received...");
+            var workout = JSON.parse(received_msg)
+            console.log(workout.heartRate)
+            document.getElementById("heartRate").innerText =workout.heartRate
+            //alert("Message is received...");
           };
           
           ws.onclose = function() {
@@ -37,5 +40,5 @@
     }
   </script>
   <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=nil">
-  
+    <div id="heartRate">Waiting...</div>
 </html>

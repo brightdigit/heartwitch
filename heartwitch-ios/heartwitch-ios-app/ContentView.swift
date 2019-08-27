@@ -10,6 +10,8 @@ import Network
 
 var globalConnection : NWConnection?
 var sourceTimer : DispatchSourceTimer?
+
+let jsonEncoder = JSONEncoder()
 struct ContentView : View {
   @State var id: String = ""
   
@@ -25,35 +27,24 @@ struct ContentView : View {
     
     task.resume()
     let source = DispatchSource.makeTimerSource()
-       
-       source.setEventHandler {
-        task.send(.data(UUID().uuidString.data(using: .utf8)!)) { (error) in
+    
+    source.setEventHandler {
+      let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
+      if let data = try? jsonEncoder.encode(wkData) {
+        
+        task.send(.data(data)) { (error) in
           print(error)
         }
-       }
-       source.schedule(deadline: .now(), repeating: 5)
-       source.activate()
-       sourceTimer = source
-//    let endPoint = NWEndpoint.url(url)
-//    let connection = NWConnection(to: endPoint, using: .tcp)
-//    //      self.connection = NWConnection(host: "echo.websocket.org", port: 443, using: .tls)
-//    //
-//    connection.stateUpdateHandler = { state in
-//      print("State:", state)
-//      switch state {
-//      case .ready:
-//        self.connectionReady(connection)
-//      default:
-//        break
-//      }
-//    }
-//    connection.start(queue: .main)
-//    globalConnection = connection
+      }
+    }
+    source.schedule(deadline: .now(), repeating: 5)
+    source.activate()
+    sourceTimer = source
   }
   
   
   func connectionReady(_ connection: NWConnection) {
-   
+    
   }
   
   var body: some View {
