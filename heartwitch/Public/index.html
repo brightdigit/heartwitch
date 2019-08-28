@@ -10,7 +10,7 @@
           //alert(window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
           //alert("ws://" + window.location.hostname +  ":" + window.location.port + "/listen/" + xhr.response.id)
           document.getElementById("id").innerText = xhr.response.id
-          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id + "/run")
+          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.hostname + "," + xhr.response.id)
           var ws = new WebSocket("ws://" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id + "/listen")
           ws.onopen = function() {
             

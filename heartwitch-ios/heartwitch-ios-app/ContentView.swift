@@ -17,6 +17,10 @@ enum SessionState : Equatable {
   case connecting, activated, identified(UUID)
 }
 
+struct SocketConfiguration {
+  let identifier : UUID
+  let hostName : String
+}
 
 protocol SessionHandlerProtocol {
   var state : SessionState { set get }
@@ -133,15 +137,30 @@ struct ContentView : View {
   
   
   @ObservedObject var sessionHandler = SessionHandler()
+  @State var showImagePicker: Bool = false
   var body: some View {
+    ZStack{
     VStack{
       stateView
       TextField("Enter the UUID", text: $id)
       Button(action: self.beginConnect) {
         Text("Connect")
       }.disabled(self.sessionHandler.state != SessionState.activated)
+      
+      Button(action:
+      self.scanQR) {
+        Image(systemName: "qrcode.viewfinder")
+      }
+    }
+    if (showImagePicker) {
+      ScannerViewController()
+    }
     }
     
+  }
+  
+  func scanQR () {
+    showImagePicker.toggle()
   }
   var stateView : some View {
     

@@ -75,32 +75,70 @@ class SessionManager : NSObject, WCSessionDelegate {
   
 }
 
-class SessionTimer {
+class SessionTimer : NSObject, URLSessionWebSocketDelegate {
   var identifier : UUID?
-  var sourceTimer : DispatchSourceTimer?
+  var timer : Timer?
   var websocketTask : URLSessionWebSocketTask?
+  var session : URLSession!
+  let queue = OperationQueue()
   
+  override init () {
+    super.init()
+    self.session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+  }
+  
+  func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+    self.timer = Timer(fire: Date(timeIntervalSinceNow: 5.0), interval: 1.0, repeats: true, block: self.onTimer)
+//        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (_) in
+//          let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
+//          print(wkData.heartRate)
+////          if let task = self.websocketTask, let data = try? jsonEncoder.encode(wkData) {
+////
+////            task.send(.data(data)) { (error) in
+////              print(error)
+////            }
+////          }
+//        }
+    //self.timer = timer
+  }
+  
+  func onTimer (_ timer : Timer) {
+              let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
+              print(wkData.heartRate)
+  }
   func beginUpdates (identifier : UUID) {
     guard let url = URL(string: "ws://localhost:8080/workouts/\(identifier)/run") else {
       return
     }
-    let task = URLSession.shared.webSocketTask(with: url)
+    let task = self.session.webSocketTask(with: url)
     
+    self.websocketTask = task
     task.resume()
-    let source = DispatchSource.makeTimerSource()
     
-    source.setEventHandler {
-      let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
-      if let data = try? jsonEncoder.encode(wkData) {
-        
-        task.send(.data(data)) { (error) in
-          print(error)
-        }
-      }
-    }
-    source.schedule(deadline: .now(), repeating: 5)
-    source.activate()
-    sourceTimer = source
+//    let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (_) in
+//      let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
+//      print(wkData.heartRate)
+//      if let task = self.websocketTask, let data = try? jsonEncoder.encode(wkData) {
+//
+//        task.send(.data(data)) { (error) in
+//          print(error)
+//        }
+//      }
+//    }
+//    let source = DispatchSource.makeTimerSource()
+//
+//    source.setEventHandler {
+//      let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
+//      if let task = self.websocketTask, let data = try? jsonEncoder.encode(wkData) {
+//
+//        task.send(.data(data)) { (error) in
+//          print(error)
+//        }
+//      }
+//    }
+//    source.schedule(deadline: .now(), repeating: 5)
+//    source.activate()
+    
   }
 }
 
