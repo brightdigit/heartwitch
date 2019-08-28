@@ -13,27 +13,40 @@ var globalConnection : NWConnection?
 var sourceTimer : DispatchSourceTimer?
 
 let jsonEncoder = JSONEncoder()
+enum SessionState : Equatable {
+  case connecting, activated, identified(UUID)
+}
 
-class SessionManager : NSObject, ObservableObject, WCSessionDelegate {
-  @Published var session : WCSession? {
-    didSet {
-      self.objectWillChange.send()
-    }
+
+protocol SessionHandlerProtocol {
+  var state : SessionState { set get }
+}
+class SessionHandler : ObservableObject, SessionHandlerProtocol {
+  @Published var state = SessionState.connecting
+  let manager = SessionManager()
+  
+  init () {
+    self.manager.handler = self
   }
   
-  @Published var identifer : UUID? {
-    didSet {
-      self.objectWillChange.send()
-    }
+}
+class SessionManager : NSObject, WCSessionDelegate {
+  func sessionDidBecomeInactive(_ session: WCSession) {
+    
   }
   
-  var connectable : Bool {
-    return self.session != nil && self.identifer == nil
+  func sessionDidDeactivate(_ session: WCSession) {
+    
   }
+  
+  var session : WCSession?
+  var handler : SessionHandlerProtocol?
   func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
     switch (activationState) {
     case .activated:
       self.session = session
+      self.handler?.state = .activated
+      print("activated")
     case .notActivated:
       self.session = nil
     case .inactive:
@@ -45,13 +58,26 @@ class SessionManager : NSObject, ObservableObject, WCSessionDelegate {
   }
   
   
-  
-  func sessionDidBecomeInactive(_ session: WCSession) {
-    self.session = nil
+  override init () {
+    super.init()
+    if WCSession.isSupported() {
+      print("activating")
+      WCSession.default.delegate = self
+      WCSession.default.activate()
+      
+    }
   }
   
-  func sessionDidDeactivate(_ session: WCSession) {
-    self.session = nil
+  func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
+    
+    
+    var bytes = [UInt8].init(repeating: 0, count: messageData.count)
+    messageData.copyBytes(to: &bytes, count: messageData.count)
+    let uuid = NSUUID(uuidBytes: bytes) as UUID
+      //self.identifier = uuid
+    self.handler?.state = .identified(uuid)
+    print(uuid)
+    replyHandler(Data())
   }
   
   public func postIdentifier(_ identifier: UUID) {
@@ -60,28 +86,20 @@ class SessionManager : NSObject, ObservableObject, WCSessionDelegate {
     }
     
     self.session!.sendMessageData(data, replyHandler: { (_) in
-      self.identifer = identifier
+      self.handler?.state = .identified(identifier)
     }) { (error) in
       print(error)
-    }
-  }
-  
-  override init () {
-    super.init()
-    if WCSession.isSupported() {
-      WCSession.default.delegate = self
-      WCSession.default.activate()
     }
   }
 }
 struct ContentView : View {
   @State var id: String = ""
-  @ObservedObject var sessionManager = SessionManager()
   
   func beginConnect (){
     if let identifier = UUID(uuidString: id) {
-      self.sessionManager.postIdentifier(identifier)
+      self.sessionHandler.manager.postIdentifier(identifier)
     }
+  }
 //    WCSession.default.sendMessage(["identifer": self.id], replyHandler: { (response) in
 //
 //    }) { (error) in
@@ -110,22 +128,30 @@ struct ContentView : View {
 //    source.schedule(deadline: .now(), repeating: 5)
 //    source.activate()
 //    sourceTimer = source
-  }
+  //}
   
   
   
+  @ObservedObject var sessionHandler = SessionHandler()
   var body: some View {
     VStack{
+      stateView
       TextField("Enter the UUID", text: $id)
       Button(action: self.beginConnect) {
         Text("Connect")
-      }
+      }.disabled(self.sessionHandler.state != SessionState.activated)
     }
+    
   }
-  
-  var connectedView : some View {
-    sessionManager.identifer.map{_ in
-      Text("Connected")
+  var stateView : some View {
+    
+    switch sessionHandler.state {
+    case .activated:
+      return Text("Activated")
+    case .connecting:
+      return Text("connecting")
+    case .identified:
+      return Text("identified")
     }
   }
 }
