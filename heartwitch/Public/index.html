@@ -1,0 +1,49 @@
+<html>
+  <script>
+    window.onload = function () {
+      var xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', 'workouts');
+      xhr.responseType = "json"
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          //alert(window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
+          //alert("ws://" + window.location.hostname +  ":" + window.location.port + "/listen/" + xhr.response.id)
+          document.getElementById("id").innerText = xhr.response.id
+          document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.hostname + "," + xhr.response.id)
+          var ws = new WebSocket("ws://" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id + "/listen")
+          ws.onopen = function() {
+            
+            // Web Socket is connected, send data using send()
+            // ws.send("Message to send");
+            
+            //alert("Message is sent...");
+            document.getElementById("heartRate").innerText = "..."
+          };
+          
+          ws.onmessage = function (evt) {
+            var received_msg = evt.data;
+            var workout = JSON.parse(received_msg)
+            document.getElementById("heartRate").innerText =workout.heartRate
+            //alert("Message is received...");
+          };
+          
+          ws.onclose = function() {
+            
+            // websocket is closed.
+            //alert("Connection is closed...");
+            document.getElementById("id").innerText = "Closed"
+          };
+        }
+        else if (xhr.status !== 200) {
+          //alert('Request failed.  Returned status of ' + xhr.status);
+          document.getElementById("id").innerText = "FAILED"
+        }
+      };
+      xhr.send();
+    }
+  </script>
+  <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=nil">
+    <div id="id">Connecting...</div>
+    <div id="heartRate">Connecting...</div>
+</html>
