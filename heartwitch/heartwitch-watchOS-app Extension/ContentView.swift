@@ -10,6 +10,9 @@ import WatchConnectivity
 let jsonEncoder = JSONEncoder()
 let jsonDecoder = JSONDecoder()
 
+struct WorkoutData {
+  var heartRate : Double?
+}
 struct SocketConfiguration : Codable, Equatable {
   let identifier : UUID
   let hostName : String

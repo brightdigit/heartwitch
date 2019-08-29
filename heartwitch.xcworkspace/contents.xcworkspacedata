@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:heartwitch-ios/heartwitch-ios-app.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:heartwitch/heartwitch.xcodeproj">
    </FileRef>
 </Workspace>
