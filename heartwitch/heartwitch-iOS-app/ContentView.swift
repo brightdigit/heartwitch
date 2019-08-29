@@ -8,12 +8,45 @@
 import SwiftUI
 import Network
 import WatchConnectivity
+import Combine
 
 var globalConnection : NWConnection?
 var sourceTimer : DispatchSourceTimer?
 
 let jsonEncoder = JSONEncoder()
 let jsonDecoder = JSONDecoder()
+
+class SocketConfigurationObject : ObservableObject {
+  @Published var configuration : SocketConfiguration? {
+    willSet {
+      self.objectWillChange.send()
+    }
+  }
+  
+  var identifierString : String {
+    get {
+      return configuration?.identifier.uuidString ?? ""
+    }
+    set (value) {
+      if let identifier = UUID(uuidString: value) {
+        self.configuration = SocketConfiguration(identifier: identifier, hostName: configuration?.hostName ?? "")
+        
+      }
+       
+    }
+  }
+  
+  var hostNameString : String {
+    get {
+      return configuration?.hostName ?? ""
+    }
+    set (value) {
+      if let configuration = configuration {
+        self.configuration = SocketConfiguration(identifier: configuration.identifier, hostName: value)
+      }
+    }
+  }
+}
 enum SessionState : Equatable {
   case connecting, activated, configured(SocketConfiguration)
 }
@@ -128,15 +161,28 @@ struct ContentView : View, ScanningListener {
   
   
   @ObservedObject var sessionHandler = SessionHandler()
+  @ObservedObject var configurationObject = SocketConfigurationObject()
   @State var showImagePicker: Bool = false
+  @State var validConfiguration : Bool = false
+  var cancellable : AnyCancellable!
+  init () {
+    
+//    let cancellable = configurationObject.$configuration.map { (configuration) in
+//      return configuration.map{ !$0.hostName.isEmpty } ?? false
+//    }.receive(on: DispatchQueue.main).assign(to: \.validConfiguration, on: self)
+//    self.cancellable = cancellable
+  }
+  
   var body: some View {
     ZStack{
     VStack{
       stateView
-      //TextField("Enter the UUID", text: $id)
-//      Button(action: self.beginConnect) {
-//        Text("Connect")
-//      }.disabled(self.sessionHandler.state != SessionState.activated)
+      
+      TextField("Enter the UUID", text: $configurationObject.identifierString)
+      TextField("Enter the URL", text: $configurationObject.hostNameString)
+      Button(action: self.beginConnect) {
+        Text("Connect")
+      }.disabled(self.sessionHandler.state != SessionState.activated && !validConfiguration)
       
       Button(action:
       self.scanQR) {
@@ -154,6 +200,11 @@ struct ContentView : View, ScanningListener {
     showImagePicker.toggle()
   }
   
+  func beginConnect () {
+    if let configuration = self.configurationObject.configuration {
+      self.sessionHandler.manager.postConfiguration(configuration)
+    }
+  }
   func controller(_ controller: ScannerViewController, scanned result: Result<SocketConfiguration, Error>) {
         switch result {
     case .success(let configuration):
