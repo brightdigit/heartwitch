@@ -136,3 +136,6 @@ xcuserdata
 DerivedData/
 .DS_Store
 .swiftpm
+
+**/Assets.xcassets/**/*.png
+**/Assets.xcassets/**/*.pdf

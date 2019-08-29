@@ -29,13 +29,16 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
   // Add WebSocket upgrade support to GET /echo
   wss.get("workouts", Workout.parameter, "run") { ws, req in
     // Add a new on text callback
+    print("Watch Connected!")
     _ = try req.parameters.next(Workout.self).map{
       workout in
      
       ws.onBinary { (ws, data) in
+print("Data Received!")
         if let workoutData = try? jsonDecoder.decode(WorkoutData.self, from: data) {
-
+          print("Heart Rate \(workoutData.heartRate)")
           workout.heartRate = workoutData.heartRate
+          
 
           _ = workout.save(on: req)
         }

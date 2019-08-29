@@ -13,11 +13,12 @@ var globalConnection : NWConnection?
 var sourceTimer : DispatchSourceTimer?
 
 let jsonEncoder = JSONEncoder()
+let jsonDecoder = JSONDecoder()
 enum SessionState : Equatable {
-  case connecting, activated, identified(UUID)
+  case connecting, activated, configured(SocketConfiguration)
 }
 
-struct SocketConfiguration {
+struct SocketConfiguration : Codable, Equatable {
   let identifier : UUID
   let hostName : String
 }
@@ -74,36 +75,26 @@ class SessionManager : NSObject, WCSessionDelegate {
   
   func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
     
-    
-    var bytes = [UInt8].init(repeating: 0, count: messageData.count)
-    messageData.copyBytes(to: &bytes, count: messageData.count)
-    let uuid = NSUUID(uuidBytes: bytes) as UUID
+    let configuration = try! jsonDecoder.decode(SocketConfiguration.self, from: messageData)
       //self.identifier = uuid
-    self.handler?.state = .identified(uuid)
-    print(uuid)
+    self.handler?.state = .configured(configuration)
+    
     replyHandler(Data())
   }
   
-  public func postIdentifier(_ identifier: UUID) {
-    let data = withUnsafePointer(to: identifier) {
-        Data(bytes: $0, count: MemoryLayout.size(ofValue:  identifier))
-    }
+  public func postConfiguration(_ configuration: SocketConfiguration) {
+    let data = try! jsonEncoder.encode(configuration)
+    
     
     self.session!.sendMessageData(data, replyHandler: { (_) in
-      self.handler?.state = .identified(identifier)
+      self.handler?.state = .configured(configuration)
     }) { (error) in
       print(error)
     }
   }
 }
-struct ContentView : View {
-  @State var id: String = ""
-  
-  func beginConnect (){
-    if let identifier = UUID(uuidString: id) {
-      self.sessionHandler.manager.postIdentifier(identifier)
-    }
-  }
+struct ContentView : View, ScanningListener {
+
 //    WCSession.default.sendMessage(["identifer": self.id], replyHandler: { (response) in
 //
 //    }) { (error) in
@@ -142,18 +133,18 @@ struct ContentView : View {
     ZStack{
     VStack{
       stateView
-      TextField("Enter the UUID", text: $id)
-      Button(action: self.beginConnect) {
-        Text("Connect")
-      }.disabled(self.sessionHandler.state != SessionState.activated)
+      //TextField("Enter the UUID", text: $id)
+//      Button(action: self.beginConnect) {
+//        Text("Connect")
+//      }.disabled(self.sessionHandler.state != SessionState.activated)
       
       Button(action:
       self.scanQR) {
-        Image(systemName: "qrcode.viewfinder")
-      }
+        Image(systemName: "qrcode.viewfinder").imageScale(.large)
+      }.disabled(self.sessionHandler.state != SessionState.activated)
     }
     if (showImagePicker) {
-      ScannerViewController()
+      ScannerView().onScan(self)
     }
     }
     
@@ -162,6 +153,16 @@ struct ContentView : View {
   func scanQR () {
     showImagePicker.toggle()
   }
+  
+  func controller(_ controller: ScannerViewController, scanned result: Result<SocketConfiguration, Error>) {
+        switch result {
+    case .success(let configuration):
+      self.sessionHandler.manager.postConfiguration(configuration)
+      self.showImagePicker.toggle()
+    case .failure(let error):
+      print(error)
+    }
+  }
   var stateView : some View {
     
     switch sessionHandler.state {
@@ -169,8 +170,8 @@ struct ContentView : View {
       return Text("Activated")
     case .connecting:
       return Text("connecting")
-    case .identified:
-      return Text("identified")
+    case .configured:
+      return Text("configured")
     }
   }
 }

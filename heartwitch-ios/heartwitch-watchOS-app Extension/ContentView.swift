@@ -8,8 +8,14 @@
 import SwiftUI
 import WatchConnectivity
 let jsonEncoder = JSONEncoder()
+let jsonDecoder = JSONDecoder()
+
+struct SocketConfiguration : Codable, Equatable {
+  let identifier : UUID
+  let hostName : String
+}
 enum SessionState : Equatable {
-  case connecting, activated, identified(UUID)
+  case connecting, activated, configured(SocketConfiguration)
 }
 
 
@@ -20,9 +26,12 @@ class SessionHandler : ObservableObject, SessionHandlerProtocol {
   @Published var state = SessionState.connecting
   let manager = SessionManager()
   
-  init () {
+  private init () {
+    print("making handler")
     self.manager.handler = self
   }
+  
+  static let global = SessionHandler()
 }
 class SessionManager : NSObject, WCSessionDelegate {
   var session : WCSession?
@@ -48,6 +57,7 @@ class SessionManager : NSObject, WCSessionDelegate {
   
   
   override init () {
+    print("making manager")
     super.init()
     if WCSession.isSupported() {
       print("activating")
@@ -59,16 +69,13 @@ class SessionManager : NSObject, WCSessionDelegate {
   
   func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
     
-    
-    var bytes = [UInt8].init(repeating: 0, count: messageData.count)
-    messageData.copyBytes(to: &bytes, count: messageData.count)
-    let uuid = NSUUID(uuidBytes: bytes) as UUID
+    let configuration = try! jsonDecoder.decode(SocketConfiguration.self, from: messageData)
     //self.identifier = uuid
     DispatchQueue.main.async {
-      self.handler?.state = .identified(uuid)
+      self.handler?.state = .configured(configuration)
     }
     
-    print(uuid)
+    print(configuration)
     replyHandler(Data())
   }
   
@@ -82,13 +89,66 @@ class SessionTimer : NSObject, URLSessionWebSocketDelegate {
   var session : URLSession!
   let queue = OperationQueue()
   
+  static let global = SessionTimer()
   override init () {
+    print("making timer")
     super.init()
-    self.session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+    self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: queue)
   }
   
+  func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, taskIsWaitingForConnectivity task: URLSessionTask) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, willBeginDelayedRequest request: URLRequest, completionHandler: @escaping (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    
+  }
+  
+  func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
+    
+  }
+  
+  
   func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
-    self.timer = Timer(fire: Date(timeIntervalSinceNow: 5.0), interval: 1.0, repeats: true, block: self.onTimer)
+    print("beginning timer", webSocketTask)
+    
+    //self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: self.onTimer)
 //        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (_) in
 //          let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
 //          print(wkData.heartRate)
@@ -102,49 +162,31 @@ class SessionTimer : NSObject, URLSessionWebSocketDelegate {
     //self.timer = timer
   }
   
+  
+  
   func onTimer (_ timer : Timer) {
               let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
               print(wkData.heartRate)
   }
-  func beginUpdates (identifier : UUID) {
-    guard let url = URL(string: "ws://localhost:8080/workouts/\(identifier)/run") else {
+  func beginUpdates (configuration : SocketConfiguration) {
+    print("beginning Updates")
+    guard let url = URL(string: "ws://\(configuration.hostName)/workouts/\(configuration.identifier)/run") else {
       return
     }
+    print("starting websocket")
     let task = self.session.webSocketTask(with: url)
+    print("init websocket")
     
     self.websocketTask = task
     task.resume()
-    
-//    let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (_) in
-//      let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
-//      print(wkData.heartRate)
-//      if let task = self.websocketTask, let data = try? jsonEncoder.encode(wkData) {
-//
-//        task.send(.data(data)) { (error) in
-//          print(error)
-//        }
-//      }
-//    }
-//    let source = DispatchSource.makeTimerSource()
-//
-//    source.setEventHandler {
-//      let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
-//      if let task = self.websocketTask, let data = try? jsonEncoder.encode(wkData) {
-//
-//        task.send(.data(data)) { (error) in
-//          print(error)
-//        }
-//      }
-//    }
-//    source.schedule(deadline: .now(), repeating: 5)
-//    source.activate()
+    print("started websocket")
     
   }
 }
 
 struct ContentView: View {
-  @ObservedObject var sessionHandler = SessionHandler()
-  let timer = SessionTimer()
+  @ObservedObject var sessionHandler = SessionHandler.global
+  
   var body: some View {
     ZStack {
       activatedView
@@ -176,20 +218,21 @@ struct ContentView: View {
   }
   
   var identifiedView : some View {
-    var identifier : UUID? = nil
-    if case let .identified(id) = sessionHandler.state {
-      identifier = id
+    var configuration : SocketConfiguration? = nil
+    if case let .configured(newConfiguration) = sessionHandler.state {
+      configuration = newConfiguration
     }
-    return (identifier).map { (_) in
+    return (configuration).map { (_) in
       Text("identified").onAppear(perform: self.beginUpdates)
     }
   }
   
   func beginUpdates () {
-    guard case let .identified(uuid) = sessionHandler.state else {
+    guard case let .configured(configuration) = sessionHandler.state else {
       return
     }
-    self.timer.beginUpdates(identifier: uuid)
+    
+    SessionTimer.global.beginUpdates(configuration: configuration)
     
   }
 }
