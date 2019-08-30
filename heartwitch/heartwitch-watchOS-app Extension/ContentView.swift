@@ -88,7 +88,7 @@ class SessionManager : NSObject, WCSessionDelegate {
 class SessionTimer : NSObject, URLSessionWebSocketDelegate {
   var identifier : UUID?
   var timer : Timer?
-  
+  var workout : WorkoutObject?
   static let global = SessionTimer()
   override init () {
     print("making timer")
@@ -163,16 +163,12 @@ class SessionTimer : NSObject, URLSessionWebSocketDelegate {
 //  }
   
   
-  
-  func onTimer (_ timer : Timer) {
-              let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
-              print(wkData.heartRate)
-  }
-  func beginUpdates (configuration : SocketConfiguration) {
+  func beginUpdates (configuration : SocketConfiguration, with workout: WorkoutObject) {
     print("beginning Updates")
     guard let url = URL(string: "http://\(configuration.hostName)/workouts/\(configuration.identifier)") else {
       return
     }
+    self.workout = workout
 //    print("starting websocket")
 //    let task = self.session.webSocketTask(with: url)
 //    print("init websocket")
@@ -180,18 +176,19 @@ class SessionTimer : NSObject, URLSessionWebSocketDelegate {
 //    self.websocketTask = task
 //    task.resume()
 //    print("started websocket")
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: self.onTimer)
+        
             let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (_) in
               let wkData = WorkoutData(heartRate: Double.random(in: 70...160))
               var urlRequest = URLRequest(url: url)
               urlRequest.httpMethod = "PUT"
               urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-              print(wkData.heartRate)
-              if let data = try? jsonEncoder.encode(wkData) {
+              
+              if let workout = self.workout, let data = try? jsonEncoder.encode(wkData) {
 
                 urlRequest.httpBody = data
                 let task = URLSession.shared.dataTask(with: urlRequest)
                 task.resume()
+                workout.workoutData = wkData
               }
             }
         self.timer = timer
@@ -199,14 +196,20 @@ class SessionTimer : NSObject, URLSessionWebSocketDelegate {
   }
 }
 
+class WorkoutObject : ObservableObject {
+  @Published var workoutData : WorkoutData? = nil
+  
+  
+}
 struct ContentView: View {
   @ObservedObject var sessionHandler = SessionHandler.global
-  
+  @EnvironmentObject var workout : WorkoutObject
   var body: some View {
     ZStack {
       activatedView
       connectingView
       identifiedView
+      workoutView
     }
     //    switch sessionHandler.state {
     //    case .activated:
@@ -217,6 +220,12 @@ struct ContentView: View {
     //      return Text("identified").onAppear(perform: beginUpdates)
     //    }
     
+  }
+  
+  var workoutView : some View {
+    workout.workoutData?.heartRate.map{
+      Text("\($0)")
+    }
   }
   
   var activatedView : some View {
@@ -234,7 +243,7 @@ struct ContentView: View {
   
   var identifiedView : some View {
     var configuration : SocketConfiguration? = nil
-    if case let .configured(newConfiguration) = sessionHandler.state {
+    if case let .configured(newConfiguration) = sessionHandler.state, workout.workoutData?.heartRate == nil {
       configuration = newConfiguration
     }
     return (configuration).map { (_) in
@@ -247,7 +256,7 @@ struct ContentView: View {
       return
     }
     
-    SessionTimer.global.beginUpdates(configuration: configuration)
+    SessionTimer.global.beginUpdates(configuration: configuration, with: workout)
     
   }
 }
