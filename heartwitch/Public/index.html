@@ -1,5 +1,71 @@
 <html>
+<!--  <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js">-->
   <script>
+  "use strict";
+  
+ window.addEventListener('cloudkitloaded', function() {
+    CloudKit.configure({
+        containers: [{
+            containerIdentifier: 'iCloud.com.brightdigit.Heartwitch',
+            apiTokenAuth: {
+                apiToken: 'fc5478729db4c0eeb01277049fb5326fae3424fcaf844d7b9f1952c1d76b886f',
+                     persist: true, // Sets a cookie.
+
+                     signInButton: {
+                       id: 'apple-sign-in-button',
+                       theme: 'black' // Other options: 'white', 'white-with-outline'.
+                     },
+
+                     signOutButton: {
+                       id: 'apple-sign-out-button',
+                       theme: 'black'
+                     }
+            },
+                     
+            environment: 'development'
+        }]
+    });
+    var container = CloudKit.getDefaultContainer();
+    var database = container.privateCloudDatabase;
+   container.setUpAuth()
+   .then(function(userIdentity) {
+
+     // Either a sign-in or a sign-out button was added to the DOM.
+
+     // userIdentity is the signed-in user or null.
+     if(userIdentity) {
+         var record = {
+
+           recordType: "Workout"
+
+         };
+         
+         database.saveRecords(record).then(
+                                           function (response) {
+                                           console.log(response);
+                                           }
+                                           )
+       //gotoAuthenticatedState(userIdentity);
+     } else {
+       container
+       .whenUserSignsIn()
+         .then(function () {
+               var record = {
+
+                 recordType: "Workout"
+
+               };
+               
+               database.saveRecords(record).then(
+                                                 function (response) {
+                                                 console.log(response);
+                                                 }
+                                                 )
+          })//
+       //.catch(gotoUnauthenticatedState);
+     }
+   });
+  });
     window.onload = function () {
       var xhr = new XMLHttpRequest();
       
@@ -43,7 +109,10 @@
       xhr.send();
     }
   </script>
+  <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
   <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=nil">
     <div id="id">Connecting...</div>
     <div id="heartRate">Connecting...</div>
+    <div id="apple-sign-in-button"></div>
+    <div id="apple-sign-out-button"></div>
 </html>

@@ -32,6 +32,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		B3597D172319EDD90049A4C7 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3597D162319EDD90049A4C7 /* ScannerViewController.swift */; };
+		B3597D1A2319EE8E0049A4C7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3597D192319EE8E0049A4C7 /* CloudKit.framework */; };
 		B3AE7FE92318787B00210914 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3D9215623183F0B00EEEDAB /* Interface.storyboard */; };
 		B3D92187231841BE00EEEDAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D92186231841BD00EEEDAB /* AppDelegate.swift */; };
 		B3D92189231841BE00EEEDAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D92188231841BE00EEEDAB /* SceneDelegate.swift */; };
@@ -39,9 +41,7 @@
 		B3D9218D231841BF00EEEDAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D9218C231841BF00EEEDAB /* Assets.xcassets */; };
 		B3D92190231841BF00EEEDAB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D9218F231841BF00EEEDAB /* Preview Assets.xcassets */; };
 		B3D92193231841C000EEEDAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3D92191231841BF00EEEDAB /* LaunchScreen.storyboard */; };
-		B3D921982318420800EEEDAB /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D9217C2318405000EEEDAB /* ScannerViewController.swift */; };
 		B3D9219B2318425000EEEDAB /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D9219A2318424F00EEEDAB /* WatchConnectivity.framework */; };
-		B3D921A4231842A200EEEDAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D921A3231842A200EEEDAB /* Assets.xcassets */; };
 		B3D921AB231842A200EEEDAB /* heartwitch-watchOS-app Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B3D921AA231842A200EEEDAB /* heartwitch-watchOS-app Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B3D921B0231842A200EEEDAB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D921AF231842A200EEEDAB /* ContentView.swift */; };
 		B3D921B2231842A200EEEDAB /* HostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D921B1231842A200EEEDAB /* HostingController.swift */; };
@@ -5141,22 +5141,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B3D9214023183EF500EEEDAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B3D9214223183EF500EEEDAB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B3D9214423183EF500EEEDAB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		B3D9214623183EF800EEEDAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B3D9214923183EF800EEEDAB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B3D9214C23183EF800EEEDAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		B3D9214E23183EF800EEEDAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B3597D162319EDD90049A4C7 /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
+		B3597D182319EE5F0049A4C7 /* heartwitch-watchOS-app Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "heartwitch-watchOS-app Extension.entitlements"; sourceTree = "<group>"; };
+		B3597D192319EE8E0049A4C7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		B3D9215723183F0B00EEEDAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		B3D9215B23183F0C00EEEDAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B3D9216523183F0C00EEEDAB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		B3D9216723183F0C00EEEDAB /* HostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingController.swift; sourceTree = "<group>"; };
-		B3D9216923183F0C00EEEDAB /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
-		B3D9216B23183F0D00EEEDAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B3D9216E23183F0D00EEEDAB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B3D9217023183F0D00EEEDAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B3D9217C2318405000EEEDAB /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		B3D9217E2318407300EEEDAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "heartwitch-iOS-app/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		B3D92184231841BD00EEEDAB /* heartwitch-iOS-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "heartwitch-iOS-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D92186231841BD00EEEDAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -5168,9 +5157,6 @@
 		B3D92194231841C000EEEDAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B3D9219A2318424F00EEEDAB /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.0.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
 		B3D9219E231842A000EEEDAB /* heartwitch-watchOS-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "heartwitch-watchOS-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3D921A1231842A000EEEDAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		B3D921A3231842A200EEEDAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B3D921A5231842A200EEEDAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B3D921AA231842A200EEEDAB /* heartwitch-watchOS-app Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "heartwitch-watchOS-app Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D921AF231842A200EEEDAB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B3D921B1231842A200EEEDAB /* HostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingController.swift; sourceTree = "<group>"; };
@@ -5935,6 +5921,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3597D1A2319EE8E0049A4C7 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6814,29 +6801,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B3D9213F23183EF500EEEDAB /* heartwitch-iOS-app */ = {
-			isa = PBXGroup;
-			children = (
-				B3D9217C2318405000EEEDAB /* ScannerViewController.swift */,
-				B3D9214023183EF500EEEDAB /* AppDelegate.swift */,
-				B3D9214223183EF500EEEDAB /* SceneDelegate.swift */,
-				B3D9214423183EF500EEEDAB /* ContentView.swift */,
-				B3D9214623183EF800EEEDAB /* Assets.xcassets */,
-				B3D9214B23183EF800EEEDAB /* LaunchScreen.storyboard */,
-				B3D9214E23183EF800EEEDAB /* Info.plist */,
-				B3D9214823183EF800EEEDAB /* Preview Content */,
-			);
-			path = "heartwitch-iOS-app";
-			sourceTree = "<group>";
-		};
-		B3D9214823183EF800EEEDAB /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				B3D9214923183EF800EEEDAB /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		B3D9215523183F0B00EEEDAB /* heartwitch-watchOS-app */ = {
 			isa = PBXGroup;
 			children = (
@@ -6847,30 +6811,10 @@
 			path = "heartwitch-watchOS-app";
 			sourceTree = "<group>";
 		};
-		B3D9216423183F0C00EEEDAB /* heartwitch-watchOS-app Extension */ = {
-			isa = PBXGroup;
-			children = (
-				B3D9216523183F0C00EEEDAB /* ContentView.swift */,
-				B3D9216723183F0C00EEEDAB /* HostingController.swift */,
-				B3D9216923183F0C00EEEDAB /* ExtensionDelegate.swift */,
-				B3D9216B23183F0D00EEEDAB /* Assets.xcassets */,
-				B3D9217023183F0D00EEEDAB /* Info.plist */,
-				B3D9216D23183F0D00EEEDAB /* Preview Content */,
-			);
-			path = "heartwitch-watchOS-app Extension";
-			sourceTree = "<group>";
-		};
-		B3D9216D23183F0D00EEEDAB /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				B3D9216E23183F0D00EEEDAB /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		B3D92185231841BD00EEEDAB /* heartwitch-iOS-app */ = {
 			isa = PBXGroup;
 			children = (
+				B3597D162319EDD90049A4C7 /* ScannerViewController.swift */,
 				B3D92186231841BD00EEEDAB /* AppDelegate.swift */,
 				B3D92188231841BE00EEEDAB /* SceneDelegate.swift */,
 				B3D9218A231841BE00EEEDAB /* ContentView.swift */,
@@ -6893,24 +6837,16 @@
 		B3D921992318424F00EEEDAB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B3597D192319EE8E0049A4C7 /* CloudKit.framework */,
 				B3D9219A2318424F00EEEDAB /* WatchConnectivity.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B3D9219F231842A000EEEDAB /* heartwitch-watchOS-app */ = {
-			isa = PBXGroup;
-			children = (
-				B3D921A0231842A000EEEDAB /* Interface.storyboard */,
-				B3D921A3231842A200EEEDAB /* Assets.xcassets */,
-				B3D921A5231842A200EEEDAB /* Info.plist */,
-			);
-			path = "heartwitch-watchOS-app";
-			sourceTree = "<group>";
-		};
 		B3D921AE231842A200EEEDAB /* heartwitch-watchOS-app Extension */ = {
 			isa = PBXGroup;
 			children = (
+				B3597D182319EE5F0049A4C7 /* heartwitch-watchOS-app Extension.entitlements */,
 				B3D921AF231842A200EEEDAB /* ContentView.swift */,
 				B3D921B1231842A200EEEDAB /* HostingController.swift */,
 				B3D921B3231842A200EEEDAB /* ExtensionDelegate.swift */,
@@ -7970,11 +7906,8 @@
 				OBJ_7 /* Sources */,
 				OBJ_22 /* Tests */,
 				OBJ_25 /* Dependencies */,
-				B3D9213F23183EF500EEEDAB /* heartwitch-iOS-app */,
 				B3D9215523183F0B00EEEDAB /* heartwitch-watchOS-app */,
-				B3D9216423183F0C00EEEDAB /* heartwitch-watchOS-app Extension */,
 				B3D92185231841BD00EEEDAB /* heartwitch-iOS-app */,
-				B3D9219F231842A000EEEDAB /* heartwitch-watchOS-app */,
 				B3D921AE231842A200EEEDAB /* heartwitch-watchOS-app Extension */,
 				OBJ_874 /* Products */,
 				OBJ_922 /* Assets.xcassets */,
@@ -11039,7 +10972,6 @@
 			files = (
 				B3D921C6231843A600EEEDAB /* Assets.xcassets in Resources */,
 				B3AE7FE92318787B00210914 /* Interface.storyboard in Resources */,
-				B3D921A4231842A200EEEDAB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11062,7 +10994,7 @@
 				B3D92187231841BE00EEEDAB /* AppDelegate.swift in Sources */,
 				B3D92189231841BE00EEEDAB /* SceneDelegate.swift in Sources */,
 				B3D9218B231841BE00EEEDAB /* ContentView.swift in Sources */,
-				B3D921982318420800EEEDAB /* ScannerViewController.swift in Sources */,
+				B3597D172319EDD90049A4C7 /* ScannerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14962,14 +14894,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		B3D9214B23183EF800EEEDAB /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B3D9214C23183EF800EEEDAB /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
 		B3D9215623183F0B00EEEDAB /* Interface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -14984,14 +14908,6 @@
 				B3D92192231841BF00EEEDAB /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		B3D921A0231842A000EEEDAB /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B3D921A1231842A000EEEDAB /* Base */,
-			);
-			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -15155,6 +15071,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "heartwitch-watchOS-app Extension/heartwitch-watchOS-app Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"heartwitch-watchOS-app Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = MLT7M394S7;
@@ -15222,6 +15139,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "heartwitch-watchOS-app Extension/heartwitch-watchOS-app Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"heartwitch-watchOS-app Extension/Preview Content\"";

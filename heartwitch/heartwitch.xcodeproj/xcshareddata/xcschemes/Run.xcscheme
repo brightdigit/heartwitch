@@ -63,7 +63,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "PUBLIC_FOLDER"
-            value = "/Users/leo/Documents/Projects/heartwitch/heartwitch/Public"
+            value = "/Users/leo/Documents/Projects/heartwitch-new/heartwitch/Public"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
