@@ -10,6 +10,7 @@ import WatchConnectivity
 let jsonEncoder = JSONEncoder()
 let jsonDecoder = JSONDecoder()
 
+
 struct WorkoutData : Codable {
   var heartRate : Double?
 }

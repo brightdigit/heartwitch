@@ -20,5 +20,8 @@ public func routes(_ router: Router) throws {
   //    router.get("todos", use: todoController.index)
   router.post("workouts", use: todoController.create)
   router.put("workouts", Workout.parameter, use: todoController.put)
+  router.get { (request) -> HTTPStatus in
+    throw Abort.redirect(to: "index.html", type: RedirectType.permanent)
+  }
   //    router.delete("todos", Todo.parameter, use: todoController.delete)
 }
