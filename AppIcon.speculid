@@ -1,5 +1,5 @@
 {
-  "set" : "heartwitch-ios/heartwitch-ios-app/Assets.xcassets/AppIcon.appiconset",
+  "set" : "heartwitch/heartwitch-ios-app/Assets.xcassets/AppIcon.appiconset",
   "source" : "gamepad.svg",
   "background" : "#FFFFFFFF",
   "remove-alpha" : true

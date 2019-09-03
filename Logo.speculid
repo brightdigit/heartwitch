@@ -1,4 +1,4 @@
 {
-  "set" : "heartwitch-ios/heartwitch-ios-app/Assets.xcassets/Logo.imageset",
+  "set" : "heartwitch/heartwitch-ios-app/Assets.xcassets/Logo.imageset",
   "source" : "gamepad.svg"
 }
