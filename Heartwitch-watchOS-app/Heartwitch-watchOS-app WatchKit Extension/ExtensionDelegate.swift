@@ -21,6 +21,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, UNUserNotificationCenter
     notificationInfo.alertLocalizationKey = "New artwork by your favorite artist.";
     notificationInfo.shouldBadge = true
     
+    //notificationInfo.desiredKeys = ["hostName", "identifier"]
+    
     subscription.notificationInfo = notificationInfo
     database.save(subscription) { (subscription, error) in
       debugPrint(subscription, error)
@@ -35,7 +37,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, UNUserNotificationCenter
         let group = DispatchGroup()
         for subscription in subscriptions {
           group.enter()
-          database.delete(withSubscriptionID: subscription.subscriptionID) {_,_ in
+          database.delete(withSubscriptionID: subscription.subscriptionID) { (id, error) in
+            debugPrint("subscription-del:", id ?? error)
             group.leave()
           }
         }
@@ -53,15 +56,27 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, UNUserNotificationCenter
     
     database.perform(query, inZoneWith: nil) { (records, error) in
       if let record = records?.first {
-        print(record["identifier"] )
+        
         let identifierData = record["identifier"] as? Data
         
-        let identifier : UUID? = identifierData.map{
+        let identifierOpt : UUID? = identifierData.map{
           let bytes = [UInt8]($0)
           return NSUUID(uuidBytes: bytes) as UUID
         }
         
-        print(identifier)
+        guard let identifier = identifierOpt else {
+          return
+        }
+        
+        guard let hostName = record["hostName"] as? String else {
+          return
+        }
+        
+        DispatchQueue.main.async {
+          debugPrint("socket ready", hostName, identifier)
+          SessionHandler.global.state = .configured(.init(identifier: identifier, hostName: hostName))
+        }
+        
       }
       
     }
@@ -90,7 +105,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, UNUserNotificationCenter
   }
   
   func didReceiveRemoteNotification(_ userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (WKBackgroundFetchResult) -> Void) {
-    debugPrint(userInfo)
+    debugPrint("notification", userInfo)
   }
   
   

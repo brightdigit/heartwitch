@@ -4,6 +4,13 @@ import Vapor
 func routes(_ r: Routes, _ c: Container) throws {
   
 
+
+  r.get { (request) throws -> EventLoopFuture<Response> in
+     let fileio = try c.make(FileIO.self)
+     let res = fileio.streamFile(at: "../../../../../Heartwitch/Public/index.html", for: request)
+     return fileio.eventLoop.makeSucceededFuture(res)
+  }
+ 
   let workoutController = try WorkoutController(db: c.make())
   //r.get("todos", use: todoController.index)
   r.post("workouts", use: workoutController.create)

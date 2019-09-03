@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import WatchConnectivity
+//import WatchConnectivity
 import Heartwitch
 
 let jsonEncoder = JSONEncoder()
@@ -23,64 +23,15 @@ protocol SessionHandlerProtocol {
   var state : SessionState { set get }
 }
 class SessionHandler : ObservableObject, SessionHandlerProtocol {
-  @Published var state = SessionState.connecting
-  let manager = SessionManager()
+  @Published var state = SessionState.connecting 
   
   private init () {
     print("making handler")
-    self.manager.handler = self
   }
   
   static let global = SessionHandler()
 }
-class SessionManager : NSObject, WCSessionDelegate {
-  var session : WCSession?
-  var handler : SessionHandlerProtocol?
-  func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-    switch (activationState) {
-    case .activated:
-      self.session = session
-      DispatchQueue.main.async {
-        self.handler?.state = .activated
-      }
-      
-      print("activated")
-    case .notActivated:
-      self.session = nil
-    case .inactive:
-      self.session = nil
-    @unknown default:
-      self.session = nil
-    }
-    
-  }
-  
-  
-  override init () {
-    print("making manager")
-    super.init()
-    if WCSession.isSupported() {
-      print("activating")
-      WCSession.default.delegate = self
-      WCSession.default.activate()
-      
-    }
-  }
-  
-  func session(_ session: WCSession, didReceiveMessageData messageData: Data, replyHandler: @escaping (Data) -> Void) {
-    
-    let configuration = try! jsonDecoder.decode(SocketConfiguration.self, from: messageData)
-    //self.identifier = uuid
-    DispatchQueue.main.async {
-      self.handler?.state = .configured(configuration)
-    }
-    
-    print(configuration)
-    replyHandler(Data())
-  }
-  
-  
-}
+
 
 class SessionTimer : NSObject, URLSessionWebSocketDelegate {
   var identifier : UUID?
