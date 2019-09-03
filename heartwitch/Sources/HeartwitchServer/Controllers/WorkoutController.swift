@@ -19,8 +19,10 @@ final class WorkoutController {
   }
   
   func create(req: Request) throws -> EventLoopFuture<Workout> {
-    let workout = Workout()
-    return workout.save(on: db).map{ workout }
+    let workout = Workout(id: UUID())
+    return workout.save(on: db).map{
+      return workout
+    }
   }
   
   func put(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {

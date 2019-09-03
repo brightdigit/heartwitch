@@ -3,8 +3,9 @@ import Vapor
 import Heartwitch
 
 final class Workout: Model, Content {
-  static let jsonEncoder = JSONEncoder()
   static let schema = "workouts"
+  
+  static let jsonEncoder = JSONEncoder()
   
   @ID(key: "id")
   var id: UUID?
@@ -15,7 +16,7 @@ final class Workout: Model, Content {
   @Timestamp(key: "createdAt", on: .create)
   var createdAt: Date?
   
-  @Timestamp(key: "updatedAt", on: .create)
+  @Timestamp(key: "updatedAt", on: .update)
   var updatedAt: Date?
   
   init() { }

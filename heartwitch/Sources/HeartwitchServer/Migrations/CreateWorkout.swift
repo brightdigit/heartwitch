@@ -3,7 +3,7 @@ import Fluent
 struct CreateWorkout: Migration {
   func prepare(on database: Database) -> EventLoopFuture<Void> {
     return database.schema("workouts")
-      .field("id", .uuid, .identifier(auto: true))
+      .field("id", .uuid, .identifier(auto: false))
       .field("heartRate", .double)
       .field("createdAt", .date)
       .field("updatedAt", .date)

@@ -29,6 +29,7 @@ func configure(_ s: inout Services) throws {
     try routes(r, c)
   }
   
+  
   /// Register middleware
   s.register(MiddlewareConfiguration.self) { c in
     // Create _empty_ middleware config
@@ -50,7 +51,7 @@ func configure(_ s: inout Services) throws {
   }
   
   s.register(SQLiteConfiguration.self) { (c) in
-    return .init(storage: .memory)
+    return .init(storage: .connection(.file(path: "db.sqlite")))
   }
   
   s.register(Database.self) { c in
