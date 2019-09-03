@@ -88,7 +88,7 @@
                                           )
         document.getElementById("id").innerText = xhr.response.id
         document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.hostname + "," + xhr.response.id)
-        var ws = new WebSocket("ws://" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id + "/listen")
+        var ws = new WebSocket("ws://" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id)
         ws.onopen = function() {
           
           // Web Socket is connected, send data using send()
