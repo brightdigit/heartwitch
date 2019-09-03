@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:_archive"
+      name = "_archive">
+      <FileRef
+         location = "group:configure.swift">
+      </FileRef>
+      <Group
+         location = "group:Models"
+         name = "Models">
+      </Group>
+      <FileRef
+         location = "group:WorkoutData.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Todo.swift">
+      </FileRef>
+      <Group
+         location = "group:Controllers"
+         name = "Controllers">
+         <FileRef
+            location = "group:TodoController.swift">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:routes.swift">
+      </FileRef>
+   </Group>
    <FileRef
-      location = "group:heartwitch/heartwitch.xcodeproj">
+      location = "group:Heartwitch">
+   </FileRef>
+   <FileRef
+      location = "container:Heartwitch-watchOS-app/Heartwitch-watchOS-app.xcodeproj">
    </FileRef>
 </Workspace>

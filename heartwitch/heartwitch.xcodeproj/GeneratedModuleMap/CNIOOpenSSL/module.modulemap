@@ -1,4 +1,0 @@
-module CNIOOpenSSL {
-    umbrella "/Users/leo/Documents/Projects/heartwitch/heartwitch/.build/checkouts/swift-nio-ssl/Sources/CNIOOpenSSL/include"
-    export *
-}
