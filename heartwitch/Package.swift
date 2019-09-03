@@ -1,25 +1,22 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.1
 import PackageDescription
 
 let package = Package(
-    name: "heartwitch",
+    name: "Heartwitch",
     products: [
-        .library(name: "heartwitch-server", targets: ["App"]),
-        .library(name: "heartwitch", targets: ["App"])
+        .library(name: "Heartwitch", targets: ["Heartwitch"]),
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
-        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
-        .package(url: "https://github.com/vapor/websocket.git", from: "1.0.0"),
-
-        // 🔵 Swift ORM (queries, models, relations, etc) built on SQLite 3.
-        .package(url: "https://github.com/vapor/fluent-sqlite.git", from: "3.0.0")
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-alpha.2"),
+        .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0-alpha.2"),
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0-alpha.3")
     ],
     targets: [
-        .target(name: "App", dependencies: ["FluentSQLite", "WebSocket", "Vapor"]),
-        .target(name: "Run", dependencies: ["App"]),
-        .target(name: "heartwitch"),
-        .testTarget(name: "AppTests", dependencies: ["App"])
+        .target(name: "Heartwitch", dependencies: []),
+        .target(name: "HeartwitchServer", dependencies: ["Heartwitch", "Fluent", "FluentSQLiteDriver", "Vapor"]),
+        .target(name: "Run", dependencies: ["HeartwitchServer"]),
+        .testTarget(name: "AppTests", dependencies: ["HeartwitchServer"])
     ]
 )
 

@@ -1,4 +1,0 @@
-module CCryptoOpenSSL {
-    umbrella "/Users/leo/Documents/Projects/heartwitch/heartwitch/.build/checkouts/crypto/Sources/CCryptoOpenSSL/include"
-    export *
-}
