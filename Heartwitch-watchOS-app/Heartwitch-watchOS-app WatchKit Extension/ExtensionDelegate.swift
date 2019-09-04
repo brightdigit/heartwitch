@@ -31,60 +31,60 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, UNUserNotificationCenter
   
   func applicationDidFinishLaunching() {
     // Perform any final initialization of your application.
-    let database = CKContainer(identifier: "iCloud.com.brightdigit.Heartwitch").privateCloudDatabase
-    database.fetchAllSubscriptions { (subscriptions, error) in
-      if let subscriptions = subscriptions {
-        let group = DispatchGroup()
-        for subscription in subscriptions {
-          group.enter()
-          database.delete(withSubscriptionID: subscription.subscriptionID) { (id, error) in
-            debugPrint("subscription-del:", id ?? error)
-            group.leave()
-          }
-        }
-        group.notify(queue: .main) {
-          self.saveNewSubscriptions(toDatabase: database)
-        }
-      }
-      if (subscriptions?.count ?? 0) < 1 {
-        self.saveNewSubscriptions(toDatabase: database)
-        
-      }
-    }
-    let query = CKQuery(recordType: "Workout", predicate: NSPredicate(value: true))
-    query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-    
-    database.perform(query, inZoneWith: nil) { (records, error) in
-      if let record = records?.first {
-        
-        let identifierData = record["identifier"] as? Data
-        
-        let identifierOpt : UUID? = identifierData.map{
-          let bytes = [UInt8]($0)
-          return NSUUID(uuidBytes: bytes) as UUID
-        }
-        
-        guard let identifier = identifierOpt else {
-          return
-        }
-        
-        guard let hostName = record["hostName"] as? String else {
-          return
-        }
-        
-        DispatchQueue.main.async {
-          debugPrint("socket ready", hostName, identifier)
-          SessionHandler.global.state = .configured(.init(identifier: identifier, hostName: hostName))
-        }
-        
-      }
-      
-    }
-    UNUserNotificationCenter.current().delegate = self
-    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge]) { (granted, error) in
-      debugPrint("request", error ?? granted)
-    }
-    WKExtension.shared().registerForRemoteNotifications()
+//    let database = CKContainer(identifier: "iCloud.com.brightdigit.Heartwitch").privateCloudDatabase
+//    database.fetchAllSubscriptions { (subscriptions, error) in
+//      if let subscriptions = subscriptions {
+//        let group = DispatchGroup()
+//        for subscription in subscriptions {
+//          group.enter()
+//          database.delete(withSubscriptionID: subscription.subscriptionID) { (id, error) in
+//            debugPrint("subscription-del:", id ?? error)
+//            group.leave()
+//          }
+//        }
+//        group.notify(queue: .main) {
+//          self.saveNewSubscriptions(toDatabase: database)
+//        }
+//      }
+//      if (subscriptions?.count ?? 0) < 1 {
+//        self.saveNewSubscriptions(toDatabase: database)
+//
+//      }
+//    }
+//    let query = CKQuery(recordType: "Workout", predicate: NSPredicate(value: true))
+//    query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+//
+//    database.perform(query, inZoneWith: nil) { (records, error) in
+//      if let record = records?.first {
+//
+//        let identifierData = record["identifier"] as? Data
+//
+//        let identifierOpt : UUID? = identifierData.map{
+//          let bytes = [UInt8]($0)
+//          return NSUUID(uuidBytes: bytes) as UUID
+//        }
+//
+//        guard let identifier = identifierOpt else {
+//          return
+//        }
+//
+//        guard let hostName = record["hostName"] as? String else {
+//          return
+//        }
+//
+//        DispatchQueue.main.async {
+//          debugPrint("socket ready", hostName, identifier)
+//          SessionHandler.global.state = .configured(.init(identifier: identifier, hostName: hostName))
+//        }
+//
+//      }
+//
+//    }
+//    UNUserNotificationCenter.current().delegate = self
+//    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge]) { (granted, error) in
+//      debugPrint("request", error ?? granted)
+//    }
+//    WKExtension.shared().registerForRemoteNotifications()
   }
   
   func applicationDidBecomeActive() {

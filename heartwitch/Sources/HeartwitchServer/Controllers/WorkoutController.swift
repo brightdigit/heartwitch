@@ -51,6 +51,7 @@ final class WorkoutController {
       if let id = workout.flatMap({ try? $0.requireID() }){
         WebSocketService.shared.save(wss, withID: id)
       }
+      
     }
   }
   //

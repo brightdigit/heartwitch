@@ -8,10 +8,24 @@ class WebSocketService  {
   var webSockets = [UUID:WebSocket]()
   
   func save (_ webSocket: WebSocket, withID id: UUID)  {
-    if let webSocket = self.webSockets[id] {
-      webSocket.close(code: WebSocketErrorCode.goingAway)
+//    if let webSocket = self.webSockets[id] {
+//      webSocket.close(code: WebSocketErrorCode.goingAway)
+//    }
+    webSocket.onError(self.webSocket(_:withError:))
+    webSocket.onText(self.webSocket(_:withText:))
+    webSocket.onCloseCode { (code) in
+      print(id, code, webSocket)
+      self.webSockets.removeValue(forKey: id)
     }
     self.webSockets[id] = webSocket
+  }
+  
+  func webSocket(_ webSocket: WebSocket, withError error: Error) {
+    print(webSocket, error)
+  }
+  
+  func webSocket(_ webSocket: WebSocket, withText text: String) {
+    print(webSocket, text)
   }
   
   func get (webSocketWithId id: UUID) -> WebSocket? {

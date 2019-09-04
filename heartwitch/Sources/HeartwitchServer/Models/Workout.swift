@@ -37,7 +37,7 @@ final class Workout: Model, Content {
     }
     
     guard let heartRate = self.heartRate else {
-      return database.eventLoop.future()
+      return webSocket.eventLoop.future()
     }
     
     let data : Data
@@ -45,15 +45,17 @@ final class Workout: Model, Content {
     do {
       data = try Workout.jsonEncoder.encode(workoutData)
     } catch let error {
-      return database.eventLoop.future(error: error)
+      return webSocket.eventLoop.future(error: error)
     }
     
     guard let text = String(data: data, encoding: .utf8) else {
-      return database.eventLoop.future(error: Abort(.internalServerError))
+      return webSocket.eventLoop.future(error: Abort(.internalServerError))
     }
+    debugPrint(text)
+    let promise = webSocket.eventLoop.makePromise(of: Void.self)
+    webSocket.send(text, promise: promise)
     
-    webSocket.send(text)
-    return database.eventLoop.future()
+    return promise.futureResult
   }
   
 }

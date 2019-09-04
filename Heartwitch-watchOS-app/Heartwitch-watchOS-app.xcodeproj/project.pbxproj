@@ -18,6 +18,8 @@
 		B316B806231C690900AFC1C1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B316B805231C690900AFC1C1 /* Preview Assets.xcassets */; };
 		B316BC81231C745B00AFC1C1 /* Heartwitch in Frameworks */ = {isa = PBXBuildFile; productRef = B316BC80231C745B00AFC1C1 /* Heartwitch */; };
 		B316BC84231C7E0100AFC1C1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B316BC83231C7E0100AFC1C1 /* CloudKit.framework */; };
+		B3B83613231F2B670048041D /* HeartwitchObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B83612231F2B670048041D /* HeartwitchObject.swift */; };
+		B3EEE0B4231F12EB00615B95 /* HeartwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EEE0B3231F12EB00615B95 /* HeartwitchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,8 @@
 		B316B807231C690900AFC1C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B316BC82231C7DFD00AFC1C1 /* Heartwitch-watchOS-app WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Heartwitch-watchOS-app WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		B316BC83231C7E0100AFC1C1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		B3B83612231F2B670048041D /* HeartwitchObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartwitchObject.swift; sourceTree = "<group>"; };
+		B3EEE0B3231F12EB00615B95 /* HeartwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartwitchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +136,8 @@
 				B316B802231C690900AFC1C1 /* Assets.xcassets */,
 				B316B807231C690900AFC1C1 /* Info.plist */,
 				B316B804231C690900AFC1C1 /* Preview Content */,
+				B3EEE0B3231F12EB00615B95 /* HeartwitchView.swift */,
+				B3B83612231F2B670048041D /* HeartwitchObject.swift */,
 			);
 			path = "Heartwitch-watchOS-app WatchKit Extension";
 			sourceTree = "<group>";
@@ -283,7 +289,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3B83613231F2B670048041D /* HeartwitchObject.swift in Sources */,
 				B316B7FF231C690800AFC1C1 /* HostingController.swift in Sources */,
+				B3EEE0B4231F12EB00615B95 /* HeartwitchView.swift in Sources */,
 				B316B7FD231C690800AFC1C1 /* ContentView.swift in Sources */,
 				B316B801231C690800AFC1C1 /* ExtensionDelegate.swift in Sources */,
 			);
