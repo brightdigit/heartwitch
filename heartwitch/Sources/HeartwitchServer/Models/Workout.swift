@@ -51,11 +51,10 @@ final class Workout: Model, Content {
     guard let text = String(data: data, encoding: .utf8) else {
       return webSocket.eventLoop.future(error: Abort(.internalServerError))
     }
-    debugPrint(text)
-    let promise = webSocket.eventLoop.makePromise(of: Void.self)
-    webSocket.send(text, promise: promise)
     
-    return promise.futureResult
+    webSocket.send(text, mask: false)
+    
+    return database.eventLoop.future()
   }
   
 }

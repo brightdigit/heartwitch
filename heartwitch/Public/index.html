@@ -1,5 +1,4 @@
 <html>
-<!--  <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js">-->
   <script>
   "use strict";
   var recordName = null;
@@ -87,8 +86,7 @@
                                           }
                                           )
         document.getElementById("id").innerText = xhr.response.id
-        document.getElementById("qrcode").setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+ window.location.hostname + "," + xhr.response.id)
-        var ws = new WebSocket("ws://" + window.location.hostname +  ":" + window.location.port + "/workouts/" + xhr.response.id)
+        var ws = new WebSocket("wss://" + window.location.hostname  + "/workouts/" + xhr.response.id)
         ws.onopen = function() {
           
           // Web Socket is connected, send data using send()
@@ -96,6 +94,7 @@
           
           //alert("Message is sent...");
           document.getElementById("heartRate").innerText = "..."
+          console.log(ws.binaryType)
         };
         
         ws.onmessage = function (evt) {
@@ -152,7 +151,7 @@
         containers: [{
             containerIdentifier: 'iCloud.com.brightdigit.Heartwitch',
             apiTokenAuth: {
-                apiToken: 'fc5478729db4c0eeb01277049fb5326fae3424fcaf844d7b9f1952c1d76b886f',
+                apiToken: '60e3be941011ab3487523ac0f31badca8e2f2c24fe17086da4377280c1716279',
                      persist: true, // Sets a cookie.
 
                      signInButton: {
@@ -186,12 +185,8 @@
      }
    });
   });
-    window.onload = function () {
-      
-    }
   </script>
   <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
-  <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=nil">
     <div id="id">Connecting...</div>
     <div id="heartRate">Connecting...</div>
     <div id="apple-sign-in-button"></div>
