@@ -130,3 +130,5 @@ iOSInjectionProject/
 # End of https://www.gitignore.io/api/xcode,swift,macos
 **/Assets.xcassets/**/*.png
 **/Assets.xcassets/**/*.pdf
+
+apiToken.js
