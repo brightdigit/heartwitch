@@ -18,11 +18,11 @@ final class WorkoutController {
     self.db = db
   }
   
-  func create(req: Request) throws -> EventLoopFuture<Workout> {
+  func create(req: Request) throws -> EventLoopFuture<WorkoutResponse> {
     let workout = Workout(id: UUID())
     return workout.save(on: db).map{
-      return workout
-    }
+      return WorkoutResponse(workout: workout)
+    }.unwrap(or: Abort(.internalServerError))
   }
   
   func put(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {

@@ -1,6 +1,21 @@
 import Fluent
 import Vapor
 import Heartwitch
+import Base32Crockford
+
+struct WorkoutResponse : Content {
+  let id : String
+  
+  init?(workout: Workout) {
+    guard let id = workout.id else {
+      return nil
+    }
+    let bytes = ByteCollection(uuid: id)
+    let data = Data(bytes)
+    let idString = Base32CrockfordEncoding.encoding.encode(data: data)
+    self.id = idString
+  }
+}
 
 final class Workout: Model, Content {
   static let schema = "workouts"
