@@ -78,19 +78,19 @@
 
         };
         var hostName = getUrlVars()["hostName"] || window.location.hostname;
-        var fields = { identifier : guid_to_base64(xhr.response.id), hostName : hostName }
-        record.fields = Object.keys(fields).reduce(function(obj,key) {
-          obj[key] = { value: fields[key] };
-          return obj;
-        },{});
-        //alert(window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
-        //alert("ws://" + window.location.hostname +  ":" + window.location.port + "/listen/" + xhr.response.id)
-        database.saveRecords(record).then(
-                                          function (response) {
-                                          recordName = response.records[0].recordName
-                                          console.log(recordName)
-                                          }
-                                          )
+//        var fields = { identifier : guid_to_base64(xhr.response.id), hostName : hostName }
+//        record.fields = Object.keys(fields).reduce(function(obj,key) {
+//          obj[key] = { value: fields[key] };
+//          return obj;
+//        },{});
+//        //alert(window.location.protocol + "//" + window.location.hostname +  ":" + window.location.port + "/run/" + xhr.response.id)
+//        //alert("ws://" + window.location.hostname +  ":" + window.location.port + "/listen/" + xhr.response.id)
+//        database.saveRecords(record).then(
+//                                          function (response) {
+//                                          recordName = response.records[0].recordName
+//                                          console.log(recordName)
+//                                          }
+//                                          )
         document.getElementById("id").innerText = xhr.response.id
         var ws = new WebSocket("wss://" + hostName  + "/workouts/" + xhr.response.id)
         ws.onopen = function() {
@@ -156,42 +156,43 @@
     .catch(onUnauthorized);
   }
  window.addEventListener('load', function() {
-    CloudKit.configure({
-        containers: [{
-            containerIdentifier: 'iCloud.com.brightdigit.Heartwitch',
-            apiTokenAuth: {
-                apiToken: apiToken,
-                     persist: true, // Sets a cookie.
-
-                     signInButton: {
-                       id: 'apple-sign-in-button',
-                       theme: 'black' // Other options: 'white', 'white-with-outline'.
-                     },
-
-                     signOutButton: {
-                       id: 'apple-sign-out-button',
-                       theme: 'black'
-                     }
-            },
-                     
-            environment: 'development'
-        }]
-    });
-    container = CloudKit.getDefaultContainer();
-    container.setUpAuth()
-   .then(function(userIdentity) {
-
-     // Either a sign-in or a sign-out button was added to the DOM.
-
-     // userIdentity is the signed-in user or null.
-     if(userIdentity) {
-    database = container.privateCloudDatabase;
-       console.log(userIdentity);
-         onLogin(userIdentity);
-       //gotoAuthenticatedState(userIdentity);
-     } else {
-         onUnauthorized();
-       //.catch(gotoUnauthenticatedState);
-     }
-   });
+                         beginNewRecord()
+//    CloudKit.configure({
+//        containers: [{
+//            containerIdentifier: 'iCloud.com.brightdigit.Heartwitch',
+//            apiTokenAuth: {
+//                apiToken: apiToken,
+//                     persist: true, // Sets a cookie.
+//
+//                     signInButton: {
+//                       id: 'apple-sign-in-button',
+//                       theme: 'black' // Other options: 'white', 'white-with-outline'.
+//                     },
+//
+//                     signOutButton: {
+//                       id: 'apple-sign-out-button',
+//                       theme: 'black'
+//                     }
+//            },
+//
+//            environment: 'development'
+//        }]
+//    });
+//    container = CloudKit.getDefaultContainer();
+//    container.setUpAuth()
+//   .then(function(userIdentity) {
+//
+//     // Either a sign-in or a sign-out button was added to the DOM.
+//
+//     // userIdentity is the signed-in user or null.
+//     if(userIdentity) {
+//    database = container.privateCloudDatabase;
+//       console.log(userIdentity);
+//         onLogin(userIdentity);
+//       //gotoAuthenticatedState(userIdentity);
+//     } else {
+//         onUnauthorized();
+//       //.catch(gotoUnauthenticatedState);
+//     }
+//   });
   });

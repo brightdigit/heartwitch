@@ -1,31 +1,31 @@
 import Fluent
-import FluentSQLiteDriver
 import Vapor
 import NIO
+import FluentPostgresDriver
 
 class WebSocketService  {
   static let shared = WebSocketService()
   var webSockets = [UUID:WebSocket]()
+  var readyIds = Set<UUID>()
   
-  func save (_ webSocket: WebSocket, withID id: UUID)  {
-//    if let webSocket = self.webSockets[id] {
-//      webSocket.close(code: WebSocketErrorCode.goingAway)
-//    }
-    webSocket.onError(self.webSocket(_:withError:))
-    webSocket.onText(self.webSocket(_:withText:))
-    webSocket.onCloseCode { (code) in
-      print(id, code, webSocket)
-      self.webSockets.removeValue(forKey: id)
+  func prepare () -> UUID {
+    let id = UUID()
+    readyIds.formUnion([id])
+    return id 
+  }
+  
+  func save (_ webSocket: WebSocket, withID id: UUID) {
+    //    if let webSocket = self.webSockets[id] {
+    //      webSocket.close(code: WebSocketErrorCode.goingAway)
+    //    }
+    guard let webSocketId = readyIds.remove(id) else {
+      return
     }
-    self.webSockets[id] = webSocket
-  }
-  
-  func webSocket(_ webSocket: WebSocket, withError error: Error) {
-    print(webSocket, error)
-  }
-  
-  func webSocket(_ webSocket: WebSocket, withText text: String) {
-    print(webSocket, text)
+    webSocket.onCloseCode { (code) in
+      print(webSocketId, code, webSocket)
+      self.webSockets.removeValue(forKey: webSocketId)
+    }
+    self.webSockets[webSocketId] = webSocket
   }
   
   func get (webSocketWithId id: UUID) -> WebSocket? {
@@ -50,7 +50,7 @@ func configure(_ s: inout Services) throws {
     var middlewares = MiddlewareConfiguration()
     
     // Serves files from `Public/` directory
-      
+    
     
     try middlewares.use(FileMiddleware(publicDirectory: "../../../../../Heartwitch/Public", fileio: c.make(FileIO.self) ))
     
@@ -61,20 +61,24 @@ func configure(_ s: inout Services) throws {
   }
   
   s.extend(Databases.self) { dbs, c in
-    try dbs.sqlite(configuration: c.make(), threadPool: c.make())
+    //try dbs.sqlite(configuration: c.make(), threadPool: c.make())
+    try dbs.postgres(config: c.make())
   }
   
-  s.register(SQLiteConfiguration.self) { (c) in
-    return .init(storage: .connection(.file(path: "db.sqlite")))
+  //   s.register(SQLiteConfiguration.self) { (c) in
+  //     return .init(storage: .connection(.file(path: "db.sqlite")))
+  //   }
+  s.register(PostgresConfiguration.self) { (c) in
+    return .init(hostname: "localhost", username: "heartwitch", password: "heartwitch")
   }
   
   s.register(Database.self) { c in
-    return try c.make(Databases.self).database(.sqlite)!
+    return try c.make(Databases.self).database(.psql)!
   }
   
   s.register(Migrations.self) { c in
     var migrations = Migrations()
-    migrations.add(CreateWorkout(), to: .sqlite)
+    migrations.add(CreateRegistration(), to: .psql)
     return migrations
   }
 }
