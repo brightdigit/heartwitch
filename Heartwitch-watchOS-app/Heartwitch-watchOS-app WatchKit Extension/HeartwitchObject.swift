@@ -101,8 +101,8 @@ public class HeartwitchObject : ObservableObject {
       return
     }
     
-    let hostName = ProcessInfo.processInfo.environment["hostName"] ?? "http://localhost:8080"
-    guard let url = URL(string: "\(hostName)/api/v1/workouts/\(shortID)") else {
+    let hostName = ProcessInfo.processInfo.environment["hostName"] ?? "https://heartwitch.app"
+    guard let url = URL(string: "\(hostName)/api/v1/workouts/\(shortID.uppercased())") else {
       return
     }
     let jsonDecoder = JSONDecoder()
