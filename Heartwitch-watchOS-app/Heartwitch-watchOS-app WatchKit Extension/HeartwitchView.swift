@@ -56,40 +56,39 @@ struct AppleLoginButton: WKInterfaceObjectRepresentable {
 
 struct HeartwitchView: View {
   @EnvironmentObject var object : HeartwitchObject
-  @State var id : String = ""
   
   var body: some View {
     ZStack{
-//      ZStack{
-//        acquiringConnectionView
-//        beginMonitoringView
-//        heartRateView
-//      }
-      TextField("code", text: $id)
+      ZStack{
+        textView
+        beginMonitoringView
+        heartRateView
+      }
     }
   }
   
-  var acquiringConnectionView : some View {
-    let hasNoConnection : Void?
-    if self.object.socketConfiguration == nil && self.object.timer == nil {
-     hasNoConnection = Void()
-    } else {
-      hasNoConnection = nil
-    }
-    return hasNoConnection.map{ Text("Getting Connection Info...").onAppear {
-           self.object.acquireSocketConfiguration()
-         }
-    }
+  var textView : some View {
+        let hasNoConnection : Void?
+    if self.object.fullIdentifier == nil && self.object.timer == nil {
+         hasNoConnection = Void()
+        } else {
+          hasNoConnection = nil
+        }
+        return hasNoConnection.map{
+          TextField("Enter Workout Id", text: $object.shortID)
+             
+        }
   }
+  
   
   var beginMonitoringView : some View {
-    let socketConfiguration : SocketConfiguration?
+    let identifier : String?
     if self.object.timer == nil {
-      socketConfiguration = self.object.socketConfiguration
+      identifier = self.object.shortID.isEmpty == false ? self.object.shortID : nil
     } else {
-      socketConfiguration = nil
+      identifier = nil
     }
-    return socketConfiguration.map{
+    return identifier.map{
       _ in
       Text("Waiting For Heart Rate...").onAppear(perform: self.object.beginMonitoring)
     }
