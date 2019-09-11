@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,8 +16,8 @@
 		B316B801231C690800AFC1C1 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B316B800231C690800AFC1C1 /* ExtensionDelegate.swift */; };
 		B316B803231C690900AFC1C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B316B802231C690900AFC1C1 /* Assets.xcassets */; };
 		B316B806231C690900AFC1C1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B316B805231C690900AFC1C1 /* Preview Assets.xcassets */; };
-		B316BC81231C745B00AFC1C1 /* Heartwitch in Frameworks */ = {isa = PBXBuildFile; productRef = B316BC80231C745B00AFC1C1 /* Heartwitch */; };
-		B316BC84231C7E0100AFC1C1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B316BC83231C7E0100AFC1C1 /* CloudKit.framework */; };
+		B3A4995E2328748C0082F091 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A4995D2328748C0082F091 /* HealthKit.framework */; };
+		B3A49960232874BF0082F091 /* WorkoutData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A4995F232874BF0082F091 /* WorkoutData.swift */; };
 		B3B83613231F2B670048041D /* HeartwitchObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B83612231F2B670048041D /* HeartwitchObject.swift */; };
 		B3EEE0B4231F12EB00615B95 /* HeartwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EEE0B3231F12EB00615B95 /* HeartwitchView.swift */; };
 /* End PBXBuildFile section */
@@ -79,6 +79,8 @@
 		B316B807231C690900AFC1C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B316BC82231C7DFD00AFC1C1 /* Heartwitch-watchOS-app WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Heartwitch-watchOS-app WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		B316BC83231C7E0100AFC1C1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		B3A4995D2328748C0082F091 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		B3A4995F232874BF0082F091 /* WorkoutData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutData.swift; sourceTree = "<group>"; };
 		B3B83612231F2B670048041D /* HeartwitchObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartwitchObject.swift; sourceTree = "<group>"; };
 		B3EEE0B3231F12EB00615B95 /* HeartwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartwitchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,8 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B316BC81231C745B00AFC1C1 /* Heartwitch in Frameworks */,
-				B316BC84231C7E0100AFC1C1 /* CloudKit.framework in Frameworks */,
+				B3A4995E2328748C0082F091 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +132,7 @@
 			children = (
 				B316BC82231C7DFD00AFC1C1 /* Heartwitch-watchOS-app WatchKit Extension.entitlements */,
 				B316B7FC231C690800AFC1C1 /* ContentView.swift */,
+				B3A4995F232874BF0082F091 /* WorkoutData.swift */,
 				B316B7FE231C690800AFC1C1 /* HostingController.swift */,
 				B316B800231C690800AFC1C1 /* ExtensionDelegate.swift */,
 				B316B802231C690900AFC1C1 /* Assets.xcassets */,
@@ -153,6 +155,7 @@
 		B316BC7F231C745B00AFC1C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B3A4995D2328748C0082F091 /* HealthKit.framework */,
 				B316BC83231C7E0100AFC1C1 /* CloudKit.framework */,
 			);
 			name = Frameworks;
@@ -209,7 +212,6 @@
 			);
 			name = "Heartwitch-watchOS-app WatchKit Extension";
 			packageProductDependencies = (
-				B316BC80231C745B00AFC1C1 /* Heartwitch */,
 			);
 			productName = "Heartwitch-watchOS-app WatchKit Extension";
 			productReference = B316B7F7231C690800AFC1C1 /* Heartwitch-watchOS-app WatchKit Extension.appex */;
@@ -294,6 +296,7 @@
 				B3EEE0B4231F12EB00615B95 /* HeartwitchView.swift in Sources */,
 				B316B7FD231C690800AFC1C1 /* ContentView.swift in Sources */,
 				B316B801231C690800AFC1C1 /* ExtensionDelegate.swift in Sources */,
+				B3A49960232874BF0082F091 /* WorkoutData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,13 +593,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B316BC80231C745B00AFC1C1 /* Heartwitch */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Heartwitch;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B316B7DE231C690300AFC1C1 /* Project object */;
 }

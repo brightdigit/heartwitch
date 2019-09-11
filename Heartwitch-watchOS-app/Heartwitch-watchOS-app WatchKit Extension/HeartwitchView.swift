@@ -7,52 +7,50 @@
 //
 
 import SwiftUI
-import Heartwitch
-import AuthenticationServices
 
-struct AppleLoginButton: WKInterfaceObjectRepresentable {
-
-    typealias WKInterfaceObjectRepresentable = WKInterfaceObjectRepresentableContext<AppleLoginButton>
-
-    func updateWKInterfaceObject(_ wkInterfaceObject: WKInterfaceAuthorizationAppleIDButton, context: WKInterfaceObjectRepresentableContext<AppleLoginButton>) {
-        // No code required
-    }
-
-    class Coordinator: NSObject, ASAuthorizationControllerDelegate {
-
-        @objc func buttonPressed() {
-
-            let appleIDProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIDProvider.createRequest()
-            request.requestedScopes = [.fullName, .email]
-
-            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-            authorizationController.delegate = self
-            authorizationController.performRequests()
-        }
-
-        func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-                // Verify the user
-              debugPrint(appleIDCredential)
-            }
-        }
-
-        func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-            // Handle error.
-        }
-
-    }
-
-    func makeCoordinator() -> Coordinator {
-        return Coordinator()
-    }
-
-    func makeWKInterfaceObject(context: WKInterfaceObjectRepresentableContext<AppleLoginButton>) -> WKInterfaceAuthorizationAppleIDButton {
-        return WKInterfaceAuthorizationAppleIDButton(target: context.coordinator, action: #selector(Coordinator.buttonPressed))
-    }
-
-}
+//struct AppleLoginButton: WKInterfaceObjectRepresentable {
+//
+//    typealias WKInterfaceObjectRepresentable = WKInterfaceObjectRepresentableContext<AppleLoginButton>
+//
+//    func updateWKInterfaceObject(_ wkInterfaceObject: WKInterfaceAuthorizationAppleIDButton, context: WKInterfaceObjectRepresentableContext<AppleLoginButton>) {
+//        // No code required
+//    }
+//
+//    class Coordinator: NSObject, ASAuthorizationControllerDelegate {
+//
+//        @objc func buttonPressed() {
+//
+//            let appleIDProvider = ASAuthorizationAppleIDProvider()
+//            let request = appleIDProvider.createRequest()
+//            request.requestedScopes = [.fullName, .email]
+//
+//            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+//            authorizationController.delegate = self
+//            authorizationController.performRequests()
+//        }
+//
+//        func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+//            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//                // Verify the user
+//              debugPrint(appleIDCredential)
+//            }
+//        }
+//
+//        func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+//            // Handle error.
+//        }
+//
+//    }
+//
+//    func makeCoordinator() -> Coordinator {
+//        return Coordinator()
+//    }
+//
+//    func makeWKInterfaceObject(context: WKInterfaceObjectRepresentableContext<AppleLoginButton>) -> WKInterfaceAuthorizationAppleIDButton {
+//        return WKInterfaceAuthorizationAppleIDButton(target: context.coordinator, action: #selector(Coordinator.buttonPressed))
+//    }
+//
+//}
 
 struct HeartwitchView: View {
   @EnvironmentObject var object : HeartwitchObject

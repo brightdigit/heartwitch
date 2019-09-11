@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Heartwitch
 
 
 struct WorkoutResponse : Codable {
